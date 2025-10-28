@@ -9,4 +9,5 @@ public interface IRoomService
     Task CreateRoom(CreateRoomRequestDto request);
     Task UpdateRoom(UpdateRoomRequestDto request);
     Task RemoveRoom(int id);
+    Task<RoomResponseDto?> GetRoom(int id);
 }

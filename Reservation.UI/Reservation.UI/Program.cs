@@ -21,12 +21,16 @@ builder.Services.AddScoped<IHotelInformationService, HotelInformationService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomPriceService, RoomPriceService>();
+builder.Services.AddScoped<IRoomFeatureService, RoomFeatureService>();
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IHotelInformationRepository, HotelInformationRepository>();
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IRoomPriceRepository, RoomPriceRepository>();
+builder.Services.AddScoped<IRoomFeatureRepository, RoomFeatureRepository>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

@@ -32,4 +32,7 @@ public class RoomService : IRoomService
 
     public async Task RemoveRoom(int id)
         => await _repo.RemoveRoom(id);
+
+    public async Task<RoomResponseDto?> GetRoom(int id)
+        => await _repo.GetRoom(id);
 }

@@ -9,4 +9,5 @@ public interface IRoomRepository
     Task CreateRoom(RoomDomain model);
     Task UpdateRoom(RoomDomain model);
     Task RemoveRoom(int id);
+    Task<RoomResponseDto?> GetRoom(int id);
 }

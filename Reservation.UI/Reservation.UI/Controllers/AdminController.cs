@@ -10,13 +10,17 @@ public class AdminController : Controller
     private readonly IPhotoService _photoService;
     private readonly ITagService _tagService;
     private readonly IRoomService _roomService;
+    private readonly IRoomFeatureService _roomFeatureService;
+    private readonly IRoomPriceService _roomPriceService;
 
-    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService)
+    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService)
     {
         _infoService = infoService;
         _photoService = photoService;
         _tagService = tagService;
         _roomService = roomService;
+        _roomFeatureService = roomFeatureService;
+        _roomPriceService = roomPriceService;
     }
     
     public IActionResult Index()
@@ -56,8 +60,8 @@ public class AdminController : Controller
         return View(model);
     }
     
-    [Route("Admin/Price/{hotelId:int}")]
-    public IActionResult Price(int hotelId)
+    [Route("Admin/WorkingRange/{hotelId:int}")]
+    public IActionResult WorkingRange(int hotelId)
     {
         AdminViewModel model = new AdminViewModel
         {
@@ -84,6 +88,26 @@ public class AdminController : Controller
             HotelId = hotelId,
             Rooms = await _roomService.GetAllRooms(hotelId)
         };
+        return View(model);
+    }
+    
+    [Route("Admin/RoomDetail/{roomId:int}")]
+    public async Task<IActionResult> RoomDetail(int roomId)
+    {
+        var roomTask = _roomService.GetRoom(roomId);
+        var featuresTask = _roomFeatureService.GetAllRoomFeatures(roomId);
+        var pricesTask = _roomPriceService.GetAllRoomPrices(roomId);
+
+        await Task.WhenAll(roomTask, featuresTask, pricesTask);
+
+        RoomViewModel model = new RoomViewModel()
+        {
+            RoomId = roomId,
+            Room = await roomTask,
+            RoomFeatures = await featuresTask,
+            RoomPrices = await pricesTask
+        };
+
         return View(model);
     }
     

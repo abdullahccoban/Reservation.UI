@@ -22,4 +22,7 @@ public class RoomRepository : ApiClientBase, IRoomRepository
 
     public async Task RemoveRoom(int id)
         => await PostAsync<Task, Task>($"{_baseUrl}api/v1/room/remove?id={id}", null);
+    
+    public async Task<RoomResponseDto?> GetRoom(int id)
+        => await GetAsync<RoomResponseDto>($"{_baseUrl}api/v1/room/getById?id={id}");
 }
