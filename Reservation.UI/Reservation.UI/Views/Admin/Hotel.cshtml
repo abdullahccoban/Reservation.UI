@@ -2,6 +2,7 @@
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Hotel Information";
+    ViewData["HotelId"] = Model.HotelId;
 }
 
 <div class="relative overflow-x-auto shadow-xl sm:rounded-lg my-5 p-3">
@@ -35,7 +36,7 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
                             @hotelInfo.Description
                         </th>
-                        <td class="px-6 py-4 text-right">
+                        <td class="flex px-6 py-4 text-right">
                             <a id="editBtn_@hotelInfo.Id" data-modal-target="crud-modal" data-modal-toggle="crud-modal" data-id="@hotelInfo.Id" data-hotel-id="@hotelInfo.HotelId" data-desc="@hotelInfo.Description" class="cursor-pointer mx-1 font-medium text-blue-600 hover:underline">Edit</a>
                             <a data-modal-target="popup-modal-@hotelInfo.Id" data-modal-toggle="popup-modal-@hotelInfo.Id" class="cursor-pointer mx-1 font-medium text-red-600 hover:underline">Remove</a>
                             <div id="popup-modal-@hotelInfo.Id" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">

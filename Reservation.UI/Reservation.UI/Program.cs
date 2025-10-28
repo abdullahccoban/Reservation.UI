@@ -18,8 +18,15 @@ builder.Services.AddScoped<IClaimsTransformation, CustomAuthClaimsTransformer>()
 builder.Services.AddSingleton<HttpClient>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IHotelInformationService, HotelInformationService>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
+
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IHotelInformationRepository, HotelInformationRepository>();
+builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

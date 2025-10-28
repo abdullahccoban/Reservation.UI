@@ -1,5 +1,134 @@
+@model AdminViewModel;
 @{
     Layout = "_AdminLayout";
+    ViewData["Title"] = "Room";
+    ViewData["HotelId"] = Model.HotelId;
 }
 
-<p>Admin Panel Room</p>
+<div class="relative overflow-x-auto shadow-xl sm:rounded-lg my-5 p-3">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 bg-gray-100">
+        <div class="flex justify-between items-center">
+            <p class="p-5 text-lg font-semibold text-gray-900">Rooms</p>
+            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" data-hotel-id="@Model.HotelId" class="flex items-center text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="button">
+                <svg class="w-6 h-6 text-white mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5v14m8-7h-2m0 0h-2m2 0v2m0-2v-2M3 11h6m-6 4h6m11 4H4c-.55228 0-1-.4477-1-1V6c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1v12c0 .5523-.4477 1-1 1Z"/>
+                </svg>
+                New
+            </button>
+        </div>
+        
+        @if (Model.Rooms != null && Model.Rooms.Count != 0)
+        {
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Room Type
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Capacity
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Count
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Edit</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model.Rooms)
+                {
+                    <tr class="bg-white border-b border-gray-200">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
+                            @room.RoomType
+                        </th>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
+                            @room.Capacity
+                        </th>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
+                            @room.Count
+                        </th>
+                        <td class="flex px-6 py-4 text-right">
+                            <a id="editBtn_@room.Id" data-modal-target="crud-modal" data-modal-toggle="crud-modal" data-id="@room.Id" data-hotel-id="@room.HotelId" data-desc="@room.RoomType" data-capacity="@room.Capacity" data-count="@room.Count" class="cursor-pointer mx-1 font-medium text-blue-600 hover:underline">Edit</a>
+                            <a data-modal-target="popup-modal-@room.Id" data-modal-toggle="popup-modal-@room.Id" class="cursor-pointer mx-1 font-medium text-red-600 hover:underline">Remove</a>
+                            <div id="popup-modal-@room.Id" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                <div class="relative p-4 w-full max-w-md max-h-full">
+                                    <div class="relative bg-white rounded-lg shadow-sm">
+                                        <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                        <div class="p-4 md:p-5 text-center">
+                                            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                            </svg>
+                                            <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete?</h3>
+                                            <button onclick="removeRoom(@room.Id)" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                                Yes, I'm sure
+                                            </button>
+                                            <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">No, cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <div class="p-4 mb-4 text-sm text-blue-900 rounded-lg bg-blue-100" role="alert">
+                <span class="font-bold">Room</span> not found!
+            </div>
+        }
+    </table>
+</div>
+
+
+
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Room
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="crud-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form class="p-4 md:p-5 text-center">
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <input class="hidden" id="hotelInfoId"/>
+                    <input class="hidden" id="hotelInfoHotelId"/>
+                    <div class="col-span-2">
+                        <input type="text" id="roomType" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Write room type here..." />
+                    </div>
+                    <div class="col-span-2">
+                        <input type="number" id="capacity" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Capacity" />
+                    </div>
+                    <div class="col-span-2">
+                        <input type="number" id="count" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Count" />
+                    </div>
+                </div>
+                <div id="errorMsg" class="hidden my-5 font-bold text-xs text-red-600">
+                    Operation failed!
+                </div>
+                <button id="saveButton" type="submit" class="text-white inline-flex items-center bg-blue-900 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Save
+                </button>
+            </form>
+        </div>
+    </div>
+</div> 
+
+<script src="~/js/room.js"></script>

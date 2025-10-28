@@ -7,10 +7,16 @@ namespace Reservation.UI.Controllers;
 public class AdminController : Controller
 {
     private readonly IHotelInformationService _infoService;
+    private readonly IPhotoService _photoService;
+    private readonly ITagService _tagService;
+    private readonly IRoomService _roomService;
 
-    public AdminController(IHotelInformationService infoService)
+    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService)
     {
         _infoService = infoService;
+        _photoService = photoService;
+        _tagService = tagService;
+        _roomService = roomService;
     }
     
     public IActionResult Index()
@@ -29,38 +35,76 @@ public class AdminController : Controller
         return View(model);
     }
     
-    public IActionResult Photo()
+    [Route("Admin/Photo/{hotelId:int}")]
+    public async Task<IActionResult> Photo(int hotelId)
     {
-        return View();
+        AdminViewModel model = new AdminViewModel
+        {
+            HotelId = hotelId,
+            Photos = await _photoService.GetAllPhotos(hotelId)
+        };
+        return View(model);
     }
     
-    public IActionResult Promotion()
+    [Route("Admin/Promotion/{hotelId:int}")]
+    public IActionResult Promotion(int hotelId)
     {
-        return View();
+        AdminViewModel model = new AdminViewModel
+        {
+            HotelId = hotelId
+        };
+        return View(model);
     }
     
-    public IActionResult Price()
+    [Route("Admin/Price/{hotelId:int}")]
+    public IActionResult Price(int hotelId)
     {
-        return View();
+        AdminViewModel model = new AdminViewModel
+        {
+            HotelId = hotelId
+        };
+        return View(model);
     }
     
-    public IActionResult Reservation()
+    [Route("Admin/Reservation/{hotelId:int}")]
+    public IActionResult Reservation(int hotelId)
     {
-        return View();
+        AdminViewModel model = new AdminViewModel
+        {
+            HotelId = hotelId
+        };
+        return View(model);
     }
     
-    public IActionResult Room()
+    [Route("Admin/Room/{hotelId:int}")]
+    public async Task<IActionResult> Room(int hotelId)
     {
-        return View();
+        AdminViewModel model = new AdminViewModel
+        {
+            HotelId = hotelId,
+            Rooms = await _roomService.GetAllRooms(hotelId)
+        };
+        return View(model);
     }
     
-    public IActionResult QA()
+    [Route("Admin/QA/{hotelId:int}")]
+    public IActionResult QA(int hotelId)
     {
-        return View();
+        AdminViewModel model = new AdminViewModel
+        {
+            HotelId = hotelId
+        };
+        return View(model);
     }
     
-    public IActionResult Tag()
+    [Route("Admin/Tag/{hotelId:int}")]
+    public async Task<IActionResult> Tag(int hotelId)
     {
-        return View();
+        AdminViewModel model = new AdminViewModel
+        {
+            HotelId = hotelId,
+            Tags = await _tagService.GetAllTags(hotelId)
+        };
+        return View(model);
     }
 }
