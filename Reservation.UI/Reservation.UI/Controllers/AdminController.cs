@@ -12,8 +12,9 @@ public class AdminController : Controller
     private readonly IRoomService _roomService;
     private readonly IRoomFeatureService _roomFeatureService;
     private readonly IRoomPriceService _roomPriceService;
+    private readonly IWorkingRangeService _workingRangeService;
 
-    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService)
+    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService, IWorkingRangeService workingRangeService)
     {
         _infoService = infoService;
         _photoService = photoService;
@@ -21,6 +22,7 @@ public class AdminController : Controller
         _roomService = roomService;
         _roomFeatureService = roomFeatureService;
         _roomPriceService = roomPriceService;
+        _workingRangeService = workingRangeService;
     }
     
     public IActionResult Index()
@@ -61,11 +63,12 @@ public class AdminController : Controller
     }
     
     [Route("Admin/WorkingRange/{hotelId:int}")]
-    public IActionResult WorkingRange(int hotelId)
+    public async Task<IActionResult> WorkingRange(int hotelId)
     {
         AdminViewModel model = new AdminViewModel
         {
-            HotelId = hotelId
+            HotelId = hotelId,
+            WorkingRanges = await _workingRangeService.GetAllWorkingRanges(hotelId)
         };
         return View(model);
     }
