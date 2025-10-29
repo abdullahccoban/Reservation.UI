@@ -1,4 +1,5 @@
-﻿@{
+﻿@model HomeViewModel;
+@{
     Layout = "_Layout";
     ViewData["Title"] = "Home";
 }
@@ -128,46 +129,51 @@
         <p class="text-xl font-bold pb-2 text-gray-600">Most Preferred Hotels</p>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-        <div class="bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
-            <a href="#" class="block">
-                <div class="w-full h-48 overflow-hidden rounded-t-lg">
+        @if (Model.HotelCards != null)
+        {
+            @foreach (var card in Model.HotelCards)
+            {
+                <div class="bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                    <a href="#" class="block">
+                        <div class="w-full h-48 overflow-hidden rounded-t-lg">
 
-                    <img class="w-full h-full object-cover"
-                         src="https://cf.bstatic.com/xdata/images/hotel/square240/477828261.jpg?k=10e7082fd094e0c4eebdf3582f075fd2f568f0167de915150ddb0412bf613364&o="
-                         alt="Otel Görseli"/>
-                </div>
-            </a>
-            <div class="p-3">
-                <a href="#">
-                    <h5 class="mb-1 text-lg font-bold tracking-tight text-gray-900 line-clamp-2">
-                        Muhteşem Manzaralı Otel Başlığı
-                    </h5>
-                </a>
-                <div class="flex items-center justify-between mb-2">
-                    <div class="flex items-center text-xs text-gray-400">
-                        4.5
-                        <svg class="w-6 h-6 text-yellow-400 px-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
-                        </svg>
-                    </div>
-                    <span class="ml-1 text-xs font-medium text-gray-500">(254 Yorum)</span> 
-                </div>
-
-                <p class="mb-2 text-sm font-normal text-gray-700 line-clamp-2">
-                    Şehrin merkezinde, tarihi dokuyu modern konforla birleştiren eşsiz bir deneyim.
-                </p>
-
-                <div class="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
-                    <span class="text-xl font-extrabold text-gray-900">
-                        4500 TL
-                        <span class="text-xs font-normal text-gray-500">/gece</span>
-                    </span>
-                    <a href="#" class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300">
-                        Gör
-                        <svg class="rtl:rotate-180 w-3 h-3 ms-1" aria-hidden="true" fill="none" viewBox="0 0 14 10">...</svg>
+                            <img class="w-full h-full object-cover"
+                                 src="@card.FirstPhotoPath"
+                                 alt="@card.Name"/>
+                        </div>
                     </a>
+                    <div class="p-3">
+                        <a href="#">
+                            <h5 class="mb-1 text-lg font-bold tracking-tight text-gray-900 line-clamp-2">
+                                @card.Name
+                            </h5>
+                        </a>
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center text-xs text-gray-400">
+                                @card.AverageScore
+                                <svg class="w-6 h-6 text-yellow-400 px-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                                </svg>
+                            </div>
+                            <span class="ml-1 text-xs font-medium text-gray-500">(@card.CommentCount)</span> 
+                        </div>
+
+                        <p class="mb-2 text-sm font-normal text-gray-700 line-clamp-2">
+                            @card.Description
+                        </p>
+
+                        <div class="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
+                            <span class="text-xl font-extrabold text-gray-900">
+                                @card.MinPrice TL
+                                <span class="text-xs font-normal text-gray-500">/night</span>
+                            </span>
+                            <a href="#" class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300">
+                                Details
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            }
+        }
     </div>
 </div>

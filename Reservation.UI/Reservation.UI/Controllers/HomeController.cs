@@ -1,25 +1,31 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Reservation.UI.Interfaces.Services;
 using Reservation.UI.Models;
 
 namespace Reservation.UI.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IHotelService _hotelService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(IHotelService hotelService)
     {
-        _logger = logger;
+        _hotelService = hotelService;
     }
     
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        HomeViewModel model = new HomeViewModel()
+        {
+            HotelCards = await _hotelService.GetHotelCards()
+        };
+        
+        return View(model);
     }
 
-    [Authorize]
+    [Authorize(Roles = "User, HotelAdmin")]
     public IActionResult Privacy()
     {
         return View();

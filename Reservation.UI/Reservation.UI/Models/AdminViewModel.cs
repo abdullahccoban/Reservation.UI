@@ -1,3 +1,4 @@
+using Reservation.UI.Models.DTOs.Response.Hotel;
 using Reservation.UI.Models.DTOs.Response.HotelInformation;
 using Reservation.UI.Models.DTOs.Response.Photo;
 using Reservation.UI.Models.DTOs.Response.Room;
@@ -14,4 +15,5 @@ public class AdminViewModel
     public List<TagResponseDto>? Tags { get; set; }
     public List<RoomResponseDto>? Rooms { get; set; }
     public List<WorkingRangeResponseDto>? WorkingRanges { get; set; }
+    public List<HotelResponseDto>? Hotels { get; set; }
 }

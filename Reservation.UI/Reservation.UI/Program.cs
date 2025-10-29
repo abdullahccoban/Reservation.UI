@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Reservation.UI.Filters;
 using Reservation.UI.Interfaces.Repositories;
 using Reservation.UI.Interfaces.Services;
@@ -12,6 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("HotelPermission", policy =>
+        policy.Requirements.Add(new HotelAccessRequirement()));
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, HotelAccessHandler>();
+
 builder.Services.AddScoped<IClaimsTransformation, CustomAuthClaimsTransformer>();
 // ...
 
@@ -24,6 +33,8 @@ builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IRoomPriceService, RoomPriceService>();
 builder.Services.AddScoped<IRoomFeatureService, RoomFeatureService>();
 builder.Services.AddScoped<IWorkingRangeService, WorkingRangeService>();
+builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IHotelAdminService, HotelAdminService>();
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IHotelInformationRepository, HotelInformationRepository>();
@@ -33,6 +44,8 @@ builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IRoomPriceRepository, RoomPriceRepository>();
 builder.Services.AddScoped<IRoomFeatureRepository, RoomFeatureRepository>();
 builder.Services.AddScoped<IWorkingRangeRepository, WorkingRangeRepository>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IHotelAdminRepository, HotelAdminRepository>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

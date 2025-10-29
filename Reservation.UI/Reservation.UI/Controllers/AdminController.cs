@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reservation.UI.Interfaces.Services;
 using Reservation.UI.Models;
 
 namespace Reservation.UI.Controllers;
 
+[Authorize(Roles = "HotelAdmin")]
 public class AdminController : Controller
 {
+    private readonly IHotelService _hotelService;
     private readonly IHotelInformationService _infoService;
     private readonly IPhotoService _photoService;
     private readonly ITagService _tagService;
@@ -14,7 +17,7 @@ public class AdminController : Controller
     private readonly IRoomPriceService _roomPriceService;
     private readonly IWorkingRangeService _workingRangeService;
 
-    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService, IWorkingRangeService workingRangeService)
+    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService, IWorkingRangeService workingRangeService, IHotelService hotelService)
     {
         _infoService = infoService;
         _photoService = photoService;
@@ -23,13 +26,20 @@ public class AdminController : Controller
         _roomFeatureService = roomFeatureService;
         _roomPriceService = roomPriceService;
         _workingRangeService = workingRangeService;
+        _hotelService = hotelService;
     }
     
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        AdminViewModel model = new AdminViewModel()
+        {
+            Hotels = await _hotelService.GetHotels("abdullahcoban096@gmail.com")
+        };
+        
+        return View(model);
     }
     
+    [Authorize(Policy = "HotelPermission")]
     [Route("Admin/Hotel/{hotelId:int}")]
     public async Task<IActionResult> Hotel(int hotelId)
     {
@@ -41,6 +51,7 @@ public class AdminController : Controller
         return View(model);
     }
     
+    [Authorize(Policy = "HotelPermission")]
     [Route("Admin/Photo/{hotelId:int}")]
     public async Task<IActionResult> Photo(int hotelId)
     {
@@ -52,6 +63,7 @@ public class AdminController : Controller
         return View(model);
     }
     
+    [Authorize(Policy = "HotelPermission")]
     [Route("Admin/Promotion/{hotelId:int}")]
     public IActionResult Promotion(int hotelId)
     {
@@ -62,6 +74,7 @@ public class AdminController : Controller
         return View(model);
     }
     
+    [Authorize(Policy = "HotelPermission")]
     [Route("Admin/WorkingRange/{hotelId:int}")]
     public async Task<IActionResult> WorkingRange(int hotelId)
     {
@@ -73,6 +86,7 @@ public class AdminController : Controller
         return View(model);
     }
     
+    [Authorize(Policy = "HotelPermission")]
     [Route("Admin/Reservation/{hotelId:int}")]
     public IActionResult Reservation(int hotelId)
     {
@@ -83,6 +97,7 @@ public class AdminController : Controller
         return View(model);
     }
     
+    [Authorize(Policy = "HotelPermission")]
     [Route("Admin/Room/{hotelId:int}")]
     public async Task<IActionResult> Room(int hotelId)
     {
@@ -114,6 +129,7 @@ public class AdminController : Controller
         return View(model);
     }
     
+    [Authorize(Policy = "HotelPermission")]
     [Route("Admin/QA/{hotelId:int}")]
     public IActionResult QA(int hotelId)
     {
@@ -124,6 +140,7 @@ public class AdminController : Controller
         return View(model);
     }
     
+    [Authorize(Policy = "HotelPermission")]
     [Route("Admin/Tag/{hotelId:int}")]
     public async Task<IActionResult> Tag(int hotelId)
     {

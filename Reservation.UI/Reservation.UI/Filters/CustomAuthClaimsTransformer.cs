@@ -2,16 +2,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Reservation.UI.Interfaces.Services;
 
 namespace Reservation.UI.Filters;
 
 public class CustomAuthClaimsTransformer : IClaimsTransformation
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHotelAdminService _adminService;
 
-    public CustomAuthClaimsTransformer(IHttpContextAccessor httpContextAccessor)
+    public CustomAuthClaimsTransformer(IHttpContextAccessor httpContextAccessor, IHotelAdminService adminService)
     {
         _httpContextAccessor = httpContextAccessor;
+        _adminService = adminService;
     }
     
     
@@ -39,7 +42,7 @@ public class CustomAuthClaimsTransformer : IClaimsTransformation
         }
 
         // 2. JWT'yi doğrula ve ClaimsPrincipal al
-        var newPrincipal = ValidateTokenAndGetPrincipal(token);
+        var newPrincipal = await ValidateTokenAndGetPrincipal(token);
 
         if (newPrincipal != null)
         {
@@ -72,7 +75,7 @@ public class CustomAuthClaimsTransformer : IClaimsTransformation
         }
     }
     
-    private ClaimsPrincipal? ValidateTokenAndGetPrincipal(string token)
+    private async Task<ClaimsPrincipal>? ValidateTokenAndGetPrincipal(string token)
     {
         var handler = new JwtSecurityTokenHandler();
 
@@ -81,19 +84,42 @@ public class CustomAuthClaimsTransformer : IClaimsTransformation
 
         var jwtToken = handler.ReadJwtToken(token);
 
-        // 1. Token Süresi Kontrolü
         if (jwtToken.ValidTo < DateTime.UtcNow)
         {
-            // Token süresi dolduysa
             return null;
         }
-
-        // 2. Claims'i Çıkar
-        // JwtSecurityTokenHandler sadece token'ı okur, doğrulamayı yapmaz.
-        // Ancak bu senaryoda basitçe Claims'i alabiliriz.
-        var identity = new ClaimsIdentity(jwtToken.Claims, "CustomJwtAuth");
         
-        // Gerekirse token'ın kendisini de bir Claim olarak ekleyin
+        var claims = new List<Claim>();
+        
+        string? role = null;
+        foreach (var claim in jwtToken.Claims)
+        {
+            if (claim.Type == "role")
+            {
+                role = claim.Value;
+                claims.Add(new Claim(ClaimTypes.Role, claim.Value));
+            }
+            else
+            {
+                claims.Add(claim);
+            }
+        }
+
+        if (role == "HotelAdmin")
+        {
+            var emailClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            if (!string.IsNullOrEmpty(emailClaim))
+            {
+                var hotelIds = await _adminService.GetAdminHotels(emailClaim);
+
+                foreach (var id in hotelIds)
+                {
+                    claims.Add(new Claim("HotelId", id.HotelId.ToString()));
+                }
+            }
+        }
+        
+        var identity = new ClaimsIdentity(claims, "CustomJwtAuth");
         identity.AddClaim(new Claim("access_token", token));
 
         return new ClaimsPrincipal(identity);

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -56,6 +57,12 @@
                                     </span>
                                 </div>
                                 <ul class="py-2" aria-labelledby="user-menu-button">
+                                    @if (@User?.Claims?.FirstOrDefault(i => i.Type == ClaimTypes.Role)?.Value == "HotelAdmin")
+                                    {
+                                        <li>
+                                            <a href="/Admin/Index" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Hotel Portal</a>
+                                        </li>
+                                    }
                                     <li>
                                         <a href="/account/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign Out</a>
                                     </li>
