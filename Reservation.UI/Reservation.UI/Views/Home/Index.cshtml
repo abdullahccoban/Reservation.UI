@@ -128,15 +128,18 @@
     <div class="my-3">
         <p class="text-xl font-bold pb-2 text-gray-600">Most Preferred Hotels</p>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+    <div class="flex gap-2 text-gray-500">
+        <span>←</span><span>→</span>
+    </div>
+    
+    <div class="flex gap-4 overflow-x-auto pb-4 scroll-hotels">
         @if (Model.HotelCards != null)
         {
             @foreach (var card in Model.HotelCards)
             {
-                <div class="bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+                <div class="min-w-[250px] bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
                     <a href="#" class="block">
                         <div class="w-full h-48 overflow-hidden rounded-t-lg">
-
                             <img class="w-full h-full object-cover"
                                  src="@card.FirstPhotoPath"
                                  alt="@card.Name"/>
@@ -176,4 +179,40 @@
             }
         }
     </div>
+    
+    
 </div>
+
+<script>
+    const scroller = document.querySelector('.scroll-hotels');
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    let autoScroll = setInterval(() => {
+        slider.scrollLeft += 1; // hız
+    }, 30);
+
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.classList.add('cursor-grabbing');
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.classList.remove('cursor-grabbing');
+    });
+    slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.classList.remove('cursor-grabbing');
+    });
+    slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 1; // hız çarpanı
+        slider.scrollLeft = scrollLeft - walk;
+    });
+</script>

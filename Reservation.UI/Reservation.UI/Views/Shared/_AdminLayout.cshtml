@@ -5,6 +5,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Reservation Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -51,8 +52,19 @@
     <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-gray-100 border-r border-gray-200 sm:translate-x-0" aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-gray-100">
             <ul class="space-y-2 font-medium">
+                @if (User?.Claims?.FirstOrDefault(i => i.Type == ClaimTypes.Role)?.Value == "SuperAdmin")
+                {
+                    <li>
+                        <a href="/Admin/HotelAdmin/@ViewData["HotelId"]" class="flex items-center p-2 text-blue-900 rounded-lg hover:bg-gray-900 hover:text-white group">
+                            <svg class="w-6 h-6 text-blue-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M18 6H6m12 4H6m12 4H6m12 4H6"/>
+                            </svg>
+                            <span class="ms-3">Hotel Admins</span>
+                        </a>
+                    </li>
+                }
                 <li>
-                     <a href="/Admin/Hotel/@ViewData["HotelId"]" class="flex items-center p-2 text-blue-900 rounded-lg hover:bg-gray-900 hover:text-white group">
+                    <a href="/Admin/Hotel/@ViewData["HotelId"]" class="flex items-center p-2 text-blue-900 rounded-lg hover:bg-gray-900 hover:text-white group">
                         <svg class="w-6 h-6 text-blue-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M18 6H6m12 4H6m12 4H6m12 4H6"/>
                         </svg>

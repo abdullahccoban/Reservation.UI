@@ -1,0 +1,260 @@
+@model HotelListViewModel;
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Super Admin Portal";
+}
+<div class="px-10 py-5">
+    <div class="flex items-center mb-4 gap-2 justify-between">
+        <form method="get" class="w-full max-w-md">
+            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="search" name="searchTerm" id="default-search" value="@Model.SearchTerm" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-green-500 focus:border-green-500" placeholder="Search Hotels" />
+                <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2">Search</button>
+            </div>
+        </form>
+        <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="flex items-center text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="button">
+            <svg class="w-6 h-6 text-white mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5v14m8-7h-2m0 0h-2m2 0v2m0-2v-2M3 11h6m-6 4h6m11 4H4c-.55228 0-1-.4477-1-1V6c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1v12c0 .5523-.4477 1-1 1Z"/>
+            </svg>
+            New
+        </button>
+    </div>
+    
+    <div class="relative overflow-x-auto rounded-lg">
+        <table class="w-full text-sm text-center text-gray-900">
+            <thead class="text-xs text-white uppercase bg-green-700">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Hotel
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Description
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Daily Capacity
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Country
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    City
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Phone
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Star Count
+                </th>
+                <th scope="col" class="px-6 py-3">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var hotel in Model.Items)
+            {
+                <tr class="bg-gray-50 border-b border-gray-300">
+                    <th class="px-6 py-4">
+                        @hotel.Name
+                    </th>
+                    <td class="px-6 py-4">
+                        @hotel.Description
+                    </td>
+                    <td class="px-6 py-4">
+                        @hotel.DailyCapacity
+                    </td>
+                    <td class="px-6 py-4">
+                        @hotel.Country
+                    </td>
+                    <td class="px-6 py-4">
+                        @hotel.City
+                    </td>
+                    <td class="px-6 py-4">
+                        @hotel.Phone
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex">
+                            @for (int i = 0; i < hotel.StarCount; i++)
+                            {
+                                <svg class="w-4 h-4 text-yellow-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                                </svg>
+                            }
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="/Admin/Hotel/@hotel.Id" class="flex items-center text-gray-500 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2">
+                            Portal
+                            <svg class="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @{
+        int current = Model.Page;
+        int total = Model.TotalPages;
+    }
+
+    <nav class="flex items-center justify-center my-6">
+        <ul class="inline-flex -space-x-px text-sm">
+
+            @* Prev *@
+            @if (current > 1)
+            {
+                <li>
+                    <a href="?page=@(current - 1)&pageSize=@Model.PageSize&searchTerm=@Model.SearchTerm"
+                       class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                        ‹
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-400 bg-gray-100 border border-gray-300 rounded-l-lg">
+                        ‹
+                    </span>
+                </li>
+            }
+
+            @* First *@
+            @if (current > 3)
+            {
+                <li>
+                    <a href="?page=1&pageSize=@Model.PageSize&searchTerm=@Model.SearchTerm"
+                       class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                        1
+                    </a>
+                </li>
+                <li>
+                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300">
+                        ...
+                    </span>
+                </li>
+            }
+
+            @* Middle *@
+            @for (int i = current - 2; i <= current + 2; i++)
+            {
+                if (i < 1 || i > total) continue;
+
+                if (i == current)
+                {
+                    <li>
+                        <span class="flex items-center justify-center px-3 h-8 leading-tight text-blue-600 bg-blue-50 border border-blue-300">
+                            @i
+                        </span>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="?page=@i&pageSize=@Model.PageSize&searchTerm=@Model.SearchTerm"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+
+            @* Last *@
+            @if (current < total - 2)
+            {
+                <li>
+                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300">
+                        ...
+                    </span>
+                </li>
+                <li>
+                    <a href="?page=@total&pageSize=@Model.PageSize&searchTerm=@Model.SearchTerm"
+                       class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                        @total
+                    </a>
+                </li>
+            }
+
+            @* Next *@
+            @if (current < total)
+            {
+                <li>
+                    <a href="?page=@(current + 1)&pageSize=@Model.PageSize&searchTerm=@Model.SearchTerm"
+                       class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                        ›
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-400 bg-gray-100 border border-gray-300 rounded-r-lg">
+                        ›
+                    </span>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Hotel
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="crud-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form class="p-4 md:p-5 text-center">
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2">
+                        <input type="text" id="hotelName" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-700 focus:border-green-700" placeholder="Write hotel name here..." />
+                    </div>
+                    <div class="col-span-2">
+                        <input type="text" id="hotelDesc" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-700 focus:border-green-700" placeholder="Write hotel description here..." />
+                    </div>
+                    <div class="col-span-2">
+                        <input type="number" id="hotelCapacity" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-700 focus:border-green-700" placeholder="Write hotel daily capacity here..." />
+                    </div>
+                    <div class="col-span-2">
+                        <input type="text" id="hotelCountry" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-700 focus:border-green-700" placeholder="Write hotel country here..." />
+                    </div>
+                    <div class="col-span-2">
+                        <input type="text" id="hotelCity" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-700 focus:border-green-700" placeholder="Write hotel city here..." />
+                    </div>
+                    <div class="col-span-2">
+                        <input type="number" id="hotelPhone" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-700 focus:border-green-700" placeholder="Write hotel phone here..." />
+                    </div>
+                    <div class="col-span-2">
+                        <input type="number" id="hotelStar" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-700 focus:border-green-700" placeholder="Write hotel star here..." />
+                    </div>
+                </div>
+                <div id="errorMsg" class="hidden my-5 font-bold text-xs text-red-600">
+                    Operation failed!
+                </div>
+                <button id="saveButton" type="submit" class="text-white inline-flex items-center bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Save
+                </button>
+            </form>
+        </div>
+    </div>
+</div> 
+
+<script src="~/js/hotel.js"></script>

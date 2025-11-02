@@ -1,35 +1,28 @@
 @model AdminViewModel;
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Otel Admin Portal</title>
-        <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
-    </head>
-    <body>
-    <div class="p-3">
-        <p class="ml-3 font-bold text-xl">Hotels</p>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Super Admin Portal";
+}
+
+<div class="px-10 py-5">
+    <p class="ml-3 font-bold text-xl">Hotels</p>
         
-        @if (Model.Hotels != null)
+    @if (Model.Hotels != null)
+    {
+        @foreach (var hotel in @Model.Hotels)
         {
-            @foreach (var hotel in @Model.Hotels)
-            {
-                <div class="flex flex-col my-5 gap-4">
-                    <div class="w-full">
-                        <a href="/Admin/Hotel/@hotel.Id" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100">
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                                @hotel.Name
-                            </h5>
-                            <p class="font-normal text-gray-700">
-                                @hotel.Description
-                            </p>
-                        </a>
-                    </div>
+            <div class="flex flex-col my-5 gap-4">
+                <div class="w-full">
+                    <a href="/Admin/Hotel/@hotel.Id" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100">
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+                            @hotel.Name
+                        </h5>
+                        <p class="font-normal text-gray-700">
+                            @hotel.Description
+                        </p>
+                    </a>
                 </div>
-            }
+            </div>
         }
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    </body>
-</html>
+    }
+</div>

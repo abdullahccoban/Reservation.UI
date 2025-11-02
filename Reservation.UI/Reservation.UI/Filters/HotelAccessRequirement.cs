@@ -10,6 +10,12 @@ public class HotelAccessHandler : AuthorizationHandler<HotelAccessRequirement>
     {
         if (context.Resource is not HttpContext httpContext) return Task.CompletedTask;
 
+        if (context.User.IsInRole("SuperAdmin"))
+        {
+            context.Succeed(requirement);
+            return Task.CompletedTask;
+        }
+        
         var routeIdStr = httpContext.Request.RouteValues["hotelId"]?.ToString();
         if (!int.TryParse(routeIdStr, out int hotelId)) return Task.CompletedTask;
 

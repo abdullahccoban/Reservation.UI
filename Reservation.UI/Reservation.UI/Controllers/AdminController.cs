@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reservation.UI.Interfaces.Services;
 using Reservation.UI.Models;
+using Reservation.UI.Models.DTOs.Request.Hotel;
 
 namespace Reservation.UI.Controllers;
 
-[Authorize(Roles = "HotelAdmin")]
+[Authorize(Roles = "HotelAdmin, SuperAdmin")]
 public class AdminController : Controller
 {
     private readonly IHotelService _hotelService;
@@ -16,8 +17,9 @@ public class AdminController : Controller
     private readonly IRoomFeatureService _roomFeatureService;
     private readonly IRoomPriceService _roomPriceService;
     private readonly IWorkingRangeService _workingRangeService;
+    private readonly IHotelAdminService _hotelAdminService;
 
-    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService, IWorkingRangeService workingRangeService, IHotelService hotelService)
+    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService, IWorkingRangeService workingRangeService, IHotelService hotelService, IHotelAdminService hotelAdminService)
     {
         _infoService = infoService;
         _photoService = photoService;
@@ -27,13 +29,47 @@ public class AdminController : Controller
         _roomPriceService = roomPriceService;
         _workingRangeService = workingRangeService;
         _hotelService = hotelService;
+        _hotelAdminService = hotelAdminService;
+    }
+    
+    [Authorize(Roles = "SuperAdmin")]
+    [HttpGet("Admin/SuperAdmin")]
+    public async Task<IActionResult> SuperAdmin(int page = 1, int pageSize = 10, string? searchTerm = null)
+    {
+        var hotels = await _hotelService.SearchHotels(new HotelSearchRequestDto
+        {
+            PageSize = pageSize,
+            Page = page,
+            SearchTerm = searchTerm
+        });
+        HotelListViewModel model = new HotelListViewModel()
+        {
+            Page = hotels.Page,
+            PageSize = hotels.PageSize,
+            TotalCount = hotels.TotalCount,
+            Items = hotels.Items,
+            SearchTerm = searchTerm
+        };
+        return View(model);
+    }
+    
+    [Authorize(Roles = "SuperAdmin")]
+    [Route("Admin/HotelAdmin/{hotelId:int}")]
+    public async Task<IActionResult> HotelAdmin(int hotelId)
+    {
+        AdminViewModel model = new AdminViewModel
+        {
+            HotelId = hotelId,
+            HotelAdmins = await _hotelAdminService.GetAllHotelAdmins(hotelId)
+        };
+        return View(model);
     }
     
     public async Task<IActionResult> Index()
     {
         AdminViewModel model = new AdminViewModel()
         {
-            Hotels = await _hotelService.GetHotels("abdullahcoban096@gmail.com")
+            Hotels = await _hotelService.GetHotels(User.Claims.Where(i => i.Type == "email").FirstOrDefault().Value.ToString())
         };
         
         return View(model);
