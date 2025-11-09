@@ -23,10 +23,25 @@ public class HotelRepository : ApiClientBase, IHotelRepository
 
     public async Task<List<HotelResponseDto>?> GetHotels(string email)
         => await GetAsync<List<HotelResponseDto>>($"{_baseUrl}api/v1/hotel/getHotelsForAdmins?email={email}");
-    
-    public async Task<List<HotelCardResponseDto>?> GetHotelCards()
-        => await GetAsync<List<HotelCardResponseDto>>($"{_baseUrl}api/v1/hotel/getHotelsCard");
-    
-    public async Task<HotelDetailDto?> GetHotelDetail(int id)
-        => await GetAsync<HotelDetailDto>($"{_baseUrl}api/v1/hotel/getHotelById?id={id}");
+
+    public async Task<List<HotelCardResponseDto>?> GetHotelCards(string? userId)
+    {
+        Dictionary<string, string>? dictionary = new Dictionary<string, string>();
+        
+        if (!string.IsNullOrEmpty(userId)) 
+            dictionary.Add("userId", userId);
+        
+        return await GetAsync<List<HotelCardResponseDto>>($"{_baseUrl}api/v1/hotel/getHotelsCard", dictionary);
+    }
+
+    public async Task<HotelDetailDto?> GetHotelDetail(int id, string? userId)
+    {
+        Dictionary<string, string>? dictionary = new Dictionary<string, string>();
+        
+        if (!string.IsNullOrEmpty(userId)) 
+            dictionary.Add("userId", userId);
+        
+        return await GetAsync<HotelDetailDto>($"{_baseUrl}api/v1/hotel/getHotelById?id={id}", dictionary);
+    }
+        
 }

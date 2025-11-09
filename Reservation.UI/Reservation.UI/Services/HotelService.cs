@@ -19,8 +19,8 @@ public class HotelService : IHotelService
     public async Task<List<HotelResponseDto>?> GetHotels(string email)
         => await _repo.GetHotels(email);
     
-    public async Task<List<HotelCardResponseDto>?> GetHotelCards()
-        => await _repo.GetHotelCards();
+    public async Task<List<HotelCardResponseDto>?> GetHotelCards(string? userId)
+        => await _repo.GetHotelCards(userId);
     
     public async Task<PagedResult<HotelResponseDto>?> SearchHotels(HotelSearchRequestDto request)
         => await _repo.SearchHotels(request);
@@ -31,6 +31,6 @@ public class HotelService : IHotelService
         await _repo.CreateHotel(domain);
     }
     
-    public async Task<HotelDetailDto?> GetHotelDetail(int id)
-    => await _repo.GetHotelDetail(id);
+    public async Task<HotelDetailDto?> GetHotelDetail(int id, string? userId)
+        => await _repo.GetHotelDetail(id, userId);
 }

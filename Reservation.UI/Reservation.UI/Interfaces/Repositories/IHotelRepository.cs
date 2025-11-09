@@ -8,9 +8,9 @@ namespace Reservation.UI.Interfaces.Repositories;
 public interface IHotelRepository
 {
     Task<List<HotelResponseDto>?> GetHotels(string email);
-    Task<List<HotelCardResponseDto>?> GetHotelCards();
+    Task<List<HotelCardResponseDto>?> GetHotelCards(string? userId);
     Task<PagedResult<HotelResponseDto>?> SearchHotels(HotelSearchRequestDto request);
     Task CreateHotel(HotelDomain model);
-    Task<HotelDetailDto?> GetHotelDetail(int id);
+    Task<HotelDetailDto?> GetHotelDetail(int id, string? userId);
 
 }

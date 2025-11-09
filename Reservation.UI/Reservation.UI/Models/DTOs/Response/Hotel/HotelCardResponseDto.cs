@@ -9,4 +9,5 @@ public class HotelCardResponseDto
     public int CommentCount { get; set; }
     public double MinPrice { get; set; }
     public string? FirstPhotoPath { get; set; }
+    public bool IsFavorite { get; set; }
 }

@@ -38,14 +38,25 @@ public abstract class ApiClientBase
         return null;
     }
 
-    protected async Task<TResponse?> GetAsync<TResponse>(string url)
+    protected async Task<TResponse?> GetAsync<TResponse>(string url, Dictionary<string, string>? headers = null)
         where TResponse : class
     {
+        using var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+        if (headers is not null)
+        {
+            foreach (var (key, value) in headers)
+            {
+                request.Headers.Remove(key);
+                request.Headers.Add(key, value);
+            }
+        }
+        
         HttpResponseMessage? response = null;
         
         try
         {
-            response = await _httpClient.GetAsync(url);
+            response = await _httpClient.SendAsync(request);
         }
         catch (HttpRequestException ex)
         {
