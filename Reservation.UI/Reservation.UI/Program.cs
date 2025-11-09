@@ -35,6 +35,8 @@ builder.Services.AddScoped<IRoomFeatureService, RoomFeatureService>();
 builder.Services.AddScoped<IWorkingRangeService, WorkingRangeService>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IHotelAdminService, HotelAdminService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IQaService, QaService>();
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IHotelInformationRepository, HotelInformationRepository>();
@@ -46,6 +48,8 @@ builder.Services.AddScoped<IRoomFeatureRepository, RoomFeatureRepository>();
 builder.Services.AddScoped<IWorkingRangeRepository, WorkingRangeRepository>();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IHotelAdminRepository, HotelAdminRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IQaRepository, QaRepository>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

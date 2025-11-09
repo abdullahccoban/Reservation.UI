@@ -138,7 +138,7 @@
             @foreach (var card in Model.HotelCards)
             {
                 <div class="min-w-[250px] bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
-                    <a href="#" class="block">
+                    <a href="/Home/Detail/@card.Id" class="block">
                         <div class="w-full h-48 overflow-hidden rounded-t-lg">
                             <img class="w-full h-full object-cover"
                                  src="@card.FirstPhotoPath"
@@ -146,7 +146,7 @@
                         </div>
                     </a>
                     <div class="p-3">
-                        <a href="#">
+                        <a href="/Home/Detail/@card.Id">
                             <h5 class="mb-1 text-lg font-bold tracking-tight text-gray-900 line-clamp-2">
                                 @card.Name
                             </h5>
@@ -170,9 +170,17 @@
                                 @card.MinPrice TL
                                 <span class="text-xs font-normal text-gray-500">/night</span>
                             </span>
-                            <a href="#" class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300">
-                                Details
-                            </a>
+                            @if (User.Identity!.IsAuthenticated)
+                            {
+                                <a data-hotel-id="@card.Id" class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300">
+                                    <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                                    </svg>
+                                    <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"/>
+                                    </svg>
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -184,15 +192,11 @@
 </div>
 
 <script>
-    const scroller = document.querySelector('.scroll-hotels');
+    const slider = document.querySelector('.scroll-hotels');
 
     let isDown = false;
     let startX;
     let scrollLeft;
-
-    let autoScroll = setInterval(() => {
-        slider.scrollLeft += 1; // hız
-    }, 30);
 
     slider.addEventListener('mousedown', (e) => {
         isDown = true;

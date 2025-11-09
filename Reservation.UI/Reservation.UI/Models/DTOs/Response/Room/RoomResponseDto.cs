@@ -7,4 +7,6 @@ public class RoomResponseDto
     public required string RoomType { get; set; }
     public int Capacity { get; set; }
     public int Count { get; set; }
+    public List<RoomPriceResponseDto> RoomPrices { get; set; }
+    public List<RoomFeatureResponseDto> RoomFeatures { get; set; }
 }

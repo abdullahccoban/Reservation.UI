@@ -30,4 +30,7 @@ public class HotelService : IHotelService
         var domain = new HotelDomain(request.Name, request.Description, request.DailyCapacity, request.Country, request.City, request.Phone, request.StarCount);
         await _repo.CreateHotel(domain);
     }
+    
+    public async Task<HotelDetailDto?> GetHotelDetail(int id)
+    => await _repo.GetHotelDetail(id);
 }

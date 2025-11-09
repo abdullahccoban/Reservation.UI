@@ -11,5 +11,6 @@ public interface IHotelRepository
     Task<List<HotelCardResponseDto>?> GetHotelCards();
     Task<PagedResult<HotelResponseDto>?> SearchHotels(HotelSearchRequestDto request);
     Task CreateHotel(HotelDomain model);
+    Task<HotelDetailDto?> GetHotelDetail(int id);
 
 }

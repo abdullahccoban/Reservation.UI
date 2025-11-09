@@ -18,8 +18,9 @@ public class AdminController : Controller
     private readonly IRoomPriceService _roomPriceService;
     private readonly IWorkingRangeService _workingRangeService;
     private readonly IHotelAdminService _hotelAdminService;
+    private readonly IQaService _qaService;
 
-    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService, IWorkingRangeService workingRangeService, IHotelService hotelService, IHotelAdminService hotelAdminService)
+    public AdminController(IHotelInformationService infoService, IPhotoService photoService, ITagService tagService, IRoomService roomService, IRoomFeatureService roomFeatureService, IRoomPriceService roomPriceService, IWorkingRangeService workingRangeService, IHotelService hotelService, IHotelAdminService hotelAdminService, IQaService qaService)
     {
         _infoService = infoService;
         _photoService = photoService;
@@ -30,6 +31,7 @@ public class AdminController : Controller
         _workingRangeService = workingRangeService;
         _hotelService = hotelService;
         _hotelAdminService = hotelAdminService;
+        _qaService = qaService;
     }
     
     [Authorize(Roles = "SuperAdmin")]
@@ -167,11 +169,12 @@ public class AdminController : Controller
     
     [Authorize(Policy = "HotelPermission")]
     [Route("Admin/QA/{hotelId:int}")]
-    public IActionResult QA(int hotelId)
+    public async Task<IActionResult> QA(int hotelId)
     {
         AdminViewModel model = new AdminViewModel
         {
-            HotelId = hotelId
+            HotelId = hotelId,
+            Qa = await _qaService.GetAllQuestions(hotelId)
         };
         return View(model);
     }

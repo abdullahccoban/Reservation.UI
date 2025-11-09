@@ -1,0 +1,380 @@
+﻿@model Reservation.UI.Models.DTOs.Response.Hotel.HotelDetailDto;
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Detail";
+}
+<div class="py-8 px-24 mx-auto container">
+    <div class="flex justify-between items-center mb-3">
+        <div class="flex">
+            @for (int i = 0; i < Model.StarCount; i++)
+            {
+                <svg class="w-4 h-4 text-yellow-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                </svg>
+            }
+        </div>
+        <div class="items-center">
+            <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-1 text-center">Reservation</button>
+        </div>
+    </div> 
+    <div class="flex justify-between">
+        <div>
+            <p class="text-xl font-bold text-center">
+                @Model.Name
+            </p>
+        </div>
+        <div class="flex gap-4">
+            @if (User.Identity!.IsAuthenticated)
+            {
+                <svg class="w-8 h-8 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                </svg>
+            }
+            <svg class="w-8 h-8 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+            </svg>
+        </div>
+    </div>
+    
+    @if (Model.Photos != null && Model.Photos.Any())
+    {
+        <div class="grid gap-4 my-5">
+            <div>
+                <img class="h-auto max-w-full rounded-lg" src="@Model.Photos.FirstOrDefault().PhotoPath" alt="">
+            </div>
+            
+            @if (Model.Photos.Count > 1)
+            {
+                <div class="grid grid-cols-5 gap-4">
+                    @foreach (var img in Model.Photos.Skip(1))
+                    {
+                        <div>
+                            <img class="h-auto max-w-full rounded-lg" src="@img.PhotoPath" alt="">
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+    
+    @if (Model.HotelInformations != null && Model.HotelInformations.Any())
+    {
+        <div class="flex flex-col my-5">
+            @foreach (var info in Model.HotelInformations)
+            {
+                <p>
+                    @info.Description
+                </p>
+            }
+        </div>
+    }
+    
+    @if (Model.Tags != null && Model.Tags.Any())
+    {
+        <div class="my-5">
+            <p class="text-lg font-bold">
+                Most Popular Features
+            </p>
+            <div class="grid grid-cols-5 gap-4 my-3">
+                @foreach (var tag in Model.Tags)
+                {
+                    <span class="bg-green-100 text-green-700 text-sm font-medium px-2.5 py-1 rounded-lg flex items-center">
+                        <svg class="w-5 h-5 text-green-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>
+                        @tag.Tag
+                    </span>
+                }
+            </div>
+        </div>
+    }
+    
+    @if (Model.Rooms != null && Model.Rooms.Any())
+    {
+        <div class="my-5">
+            <p class="text-lg font-bold">
+                Rooms
+            </p>
+            
+            <div class="flex flex-col my-3">
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Room Type
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Price
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var room in Model.Rooms)
+                        {
+                            <tr class="bg-white border-b border-gray-200">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    <div class="flex flex-col">
+                                        <p class="font-bold">@room.RoomType</p>
+                                        <div class="grid grid-cols-2">
+                                            @if (room.RoomFeatures.Any())
+                                            {
+                                                @foreach (var roomFeatures in room.RoomFeatures)
+                                                {
+                                                    <div class="flex items-center text-gray-500 text-xs">
+                                                        <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                                        </svg>
+                                                        @roomFeatures.Feature
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </th>
+                                <td class="px-6 py-4">
+                                    $ @(room.RoomPrices.Any() ? room.RoomPrices.Where(i => i.StartDate < DateTime.UtcNow && i.EndDate > DateTime.UtcNow)?.FirstOrDefault()?.Price : 0)
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="items-center">
+                                        <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-1 text-center">Complete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    
+    @{
+        string scoreText;
+
+        if (Model.AverageScore < 1)
+            scoreText = "Bad";
+        else if (Model.AverageScore < 2)
+            scoreText = "Not Good";
+        else if (Model.AverageScore < 3)
+            scoreText = "Average";
+        else if (Model.AverageScore < 4)
+            scoreText = "Good";
+        else
+            scoreText = "Excellent";
+    }
+    
+    @if (Model.Comments != null && Model.Comments.Any())
+    {
+        <div class="my-5">
+            <p class="text-lg font-bold">Reviews</p>
+            <div class="flex items-center">
+                <span class="bg-green-100 text-green-700 text-sm font-medium px-2.5 py-2 rounded-lg flex items-center">
+                    @Model.AverageScore
+                </span>
+                <p class="font-bold text-xs mx-1">@scoreText</p>
+                <svg class="w-3 h-3 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 6h.01M12 12h.01M12 18h.01"/>
+                </svg>
+                <p class="text-sm mx-1 text-gray-500">@Model.CommentCount reviews</p>
+                <a id="comment_button" data-modal-target="comment-modal" data-modal-toggle="comment-modal" data-hotel-id="@Model.Id" class="text-blue-600 cursor-pointer text-sm">Read all reviews...</a>
+            </div>
+            <div class="grid grid-cols-3 my-3 gap-3">
+                @foreach (var comment in Model.Comments.Take(3))
+                {
+                    <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+                        <div class="flex items-center gap-1">
+                            <svg class="w-5 h-5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                            <div class="flex flex-col gap-1 text-gray-500">
+                                <p class="text-sm">Point: @comment.Point</p>
+                                <p class="text-xs">@comment.CreatedAt?.ToString("dd MMM yyyy HH:mm")</p>
+                            </div>
+                                
+                        </div>
+                        <p class="my-3 font-normal text-gray-700 text-sm">
+                            @comment.Comment
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    
+    
+    @if (Model.Qas != null && Model.Qas.Any())
+    {
+        <div class="my-5">
+            <p class="text-lg font-bold">
+                Questions
+            </p>
+            <div class="flex gap-4 my-5">
+                <div class="w-full font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+                    @foreach (var qa in Model.Qas.Take(3))
+                    {
+                        <a class="justify-between flex items-center w-full px-4 py-2 border-b border-gray-200 rounded-t-lg cursor-pointer" data-drawer-target="qa_drawer_@qa.Id" data-drawer-show="qa_drawer_@qa.Id" data-drawer-placement="right">
+                            <p class="px-1 py-2 flex items-center text-sm text-gray-800 gap-1">
+                                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
+                                </svg>
+                                @qa.Question
+                            </p>
+                            <div class="text-sm">
+                                >
+                            </div>
+
+                        </a>
+                        <!-- drawer component -->
+                        <div id="qa_drawer_@qa.Id" class="rounded-lg fixed top-0 right-0 z-40 h-screen p-4 overflow-y-auto transition-transform translate-x-full bg-white w-1/2" tabindex="-1" aria-labelledby="drawer-right-label">
+                            <h5 id="drawer-right-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-500">
+                                <svg class="w-4 h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                </svg>@Model.Name</h5>
+                            <button type="button" data-drawer-hide="qa_drawer_@qa.Id" aria-controls="qa_drawer_@qa.Id" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                                <span class="sr-only">Close menu</span>
+                            </button>
+                            <p class="flex items-center mb-6 text-sm text-gray-800">
+                                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
+                                </svg>
+                                @qa.Question
+                            </p>
+                            <p class="flex items-center mb-6 text-sm text-gray-800 bg-gray-100 p-3 rounded-lg">
+                                @qa.Answer
+                            </p>
+
+                            <div class="absolute bottom-0 left-0 w-full p-4 bg-white border-t">
+                                <button data-modal-target="ask-modal" data-modal-toggle="ask-modal"
+                                    class="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded-lg shadow">
+                                    Ask Question
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <a class="w-1/2 block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <div class="my-5 text-center">
+                        <p class="font-medium text-sm text-gray-500">Do you want to see other questions?</p>
+                    </div>
+                    <div class="flex justify-center items-center">
+                        <button type="button" data-modal-target="ask-modal" data-modal-toggle="ask-modal" class="py-2.5 px-5 text-sm font-medium text-green-700 focus:outline-none bg-white rounded-lg border border-green-700 hover:bg-green-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">
+                            Ask Question
+                        </button>
+                    </div>
+                </a>
+
+            </div>
+            <div class="flex items-center">
+                <button id="qa_button" data-modal-target="qa-modal" data-modal-toggle="qa-modal" data-hotel-id="@Model.Id" type="button" data-drawer-target="drawer-ask-question-example" data-drawer-show="drawer-ask-question-example" data-drawer-placement="right" class="py-2.5 px-5 text-sm font-medium text-green-700 focus:outline-none bg-white rounded-lg border border-green-700 hover:bg-green-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">
+                    See All Questions
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <a class="w-1/2 block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div class="my-5 text-center">
+                <p class="font-medium text-sm text-gray-500">Do you want to see other questions?</p>
+            </div>
+            <div class="flex justify-center items-center">
+                <button type="button" data-modal-target="ask-modal" data-modal-toggle="ask-modal" class="py-2.5 px-5 text-sm font-medium text-green-700 focus:outline-none bg-white rounded-lg border border-green-700 hover:bg-green-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100">
+                    Ask Question
+                </button>
+            </div>
+        </a>
+    }
+</div>
+
+<!-- Comment modal -->
+<div id="comment-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Comments
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="comment-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div id="comment_body" class="p-4 md:p-5 space-y-4">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Qa modal -->
+<div id="qa-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Q&A's
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="qa-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div id="qa_body" class="p-4 md:p-5 space-y-4">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ask Question modal -->
+<div id="ask-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-sm">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Ask Question
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="ask-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form class="p-4 md:p-5">
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2">
+                        <div class="col-span-2">
+                            <textarea id="yourQuestion" data-hotel-id="@Model.Id" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500" placeholder="Write your question here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Ask
+                </button>
+            </form>
+        </div>
+    </div>
+</div> 
+
+<script src="~/js/detail.js"></script>

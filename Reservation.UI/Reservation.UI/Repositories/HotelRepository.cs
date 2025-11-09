@@ -26,4 +26,7 @@ public class HotelRepository : ApiClientBase, IHotelRepository
     
     public async Task<List<HotelCardResponseDto>?> GetHotelCards()
         => await GetAsync<List<HotelCardResponseDto>>($"{_baseUrl}api/v1/hotel/getHotelsCard");
+    
+    public async Task<HotelDetailDto?> GetHotelDetail(int id)
+        => await GetAsync<HotelDetailDto>($"{_baseUrl}api/v1/hotel/getHotelById?id={id}");
 }

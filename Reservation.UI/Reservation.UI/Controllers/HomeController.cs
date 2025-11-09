@@ -24,6 +24,12 @@ public class HomeController : Controller
         
         return View(model);
     }
+    
+    public async Task<IActionResult> Detail(int id)
+    {
+        var hotelDetail = await _hotelService.GetHotelDetail(id);
+        return View(hotelDetail);
+    }
 
     [Authorize(Roles = "User, HotelAdmin")]
     public IActionResult Privacy()

@@ -10,5 +10,6 @@ public interface IHotelService
     Task<List<HotelCardResponseDto>?> GetHotelCards();
     Task<PagedResult<HotelResponseDto>?> SearchHotels(HotelSearchRequestDto request);
     Task CreateHotel(CreateHotelRequestDto request);
+    Task<HotelDetailDto?> GetHotelDetail(int id);
 
 }

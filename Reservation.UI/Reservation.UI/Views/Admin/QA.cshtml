@@ -5,4 +5,95 @@
     ViewData["HotelId"] = Model.HotelId;
 }
 
-<p>Coming Soon!</p>
+<div class="relative overflow-x-auto shadow-xl sm:rounded-lg my-5 p-3">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 bg-gray-100">
+        <div class="flex justify-between items-center">
+            <p class="p-5 text-lg font-semibold text-gray-900">Q & A</p>
+        </div>
+        
+        @if (Model.Qa != null && Model.Qa.Any())
+        {
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Question
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Question Date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Answer
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Answer Date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var question in Model.Qa)
+            {
+                <tr class="bg-white border-b border-gray-200">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
+                        @question.Question
+                    </th>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
+                        @question.QuestionDate
+                    </th>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
+                        @if (string.IsNullOrEmpty(question.Answer))
+                        {
+                            @*<div class="col-span-2">
+                                <textarea id="answer" data-id="@question.Id" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500" placeholder="Write your answer here..."></textarea>
+                            </div>*@
+                            <div class="col-span-2 flex gap-2 items-center">
+                                <textarea id="answer_@question.Id" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-green-500 focus:border-green-500" placeholder="Write your answer here..."></textarea>
+                                <button onclick="answer(@question.Id)" class="bg-green-600 hover:bg-green-700 text-white rounded-full p-1">
+                                    <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            @question.Answer
+                        }
+                    </th>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-normal break-words">
+                        @if (question.Answer != null)
+                        {
+                            @question.AnswerDate
+                        }
+                    </th>
+                    <td class="flex px-6 py-4 text-right">
+                        @if (question.Answer == null)
+                        {
+                            <a id="editBtn_@question.Id"
+                               data-modal-target="crud-modal"
+                               data-modal-toggle="crud-modal"
+                               data-id="@question.Id"
+                               data-hotel-id="@question.HotelId"
+                               data-question="@question.Question"
+                               data-question-date="@question.QuestionDate"
+                               class="cursor-pointer mx-1 font-medium text-blue-600 hover:underline">
+                                Answer
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        }
+        else
+        {
+            <div class="p-4 mb-4 text-sm text-blue-900 rounded-lg bg-blue-100" role="alert">
+                <span class="font-bold">Question</span> not found!
+            </div>
+        }
+    </table>
+</div>
+
+<script src="~/js/qa.js"></script>
